@@ -11,17 +11,57 @@
  
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script>
+		//定义一个函数，完成存款的计算   function函数的语法 calc函数名 {}里面写形参
+		function calc()
+		{
+			//一开始处进行表单验证，看看输入的是否是数字	
+			//1、获取存款金额（读取文本框的数据） （.value）就是获取值
+			var cunkuanjine = document.getElementById("money").value;
+			//定义一个正则表达式（规则表达式），假设要求最多是六位数字
+			var regExp =/^[0-9]{2,6}$/;//（定义^开头$结尾）
+			//	[0-9]表示是数字{2， 6}表示最小为两位最大为六位
+			if (!regExp.test(cunkuanjine))//test而不是text
+			//匹配,如果匹配则返回ture否则返回错误
+			{
+				document.getElementById("money").value="输入不合法！必须是2-6位的数字!";
+				document.getElementById("money").style="color:red";
+				return;//组织程序正常进行
+			}
+			//取到的值是：“8000”，带有引号，不是数字，是字符串
+			//把“8000”->变成8000
+			//把字符串转为整数 
+			var cunkuannum=parseInt(cunkuanjine);
+			//2、开始计算
+			//先取得存款的年限对应的年利率
+			var lilv = document.getElementById("year").value;
+			//8020var lilvnum = parseInt(lilv);转与不转都可以
+			var lixi = cunkuannum*lilv;//利息
+			var total = cunkuannum+lixi;//本息合计
+			//3、把计算的结构写入相应的文本框
+			//往文本框里填写东西
+			document.getElementById("lixi").value=lixi;
+			//document.getElementById("total")定位到.value=total;赋值
+			document.getElementById("total").value=total;
+		}
+		function clearContent()
+		{
+			//	清空文本框
+			document.getElementById("money").value='';
+			document.getElementById("money").style="color:black";
+		}
+	</script>
 	</head>
 	<body>
 		<div class="container text-center" >
-			<h1>个人网银-个人存款计算</h1>
+			<h1>个人网银-个人存款计算</h1> 
 			<table class="table table-bordered text-center">
 				<tr class="bg-primary">
 					<td colspan="2">个人存款计算</td>
 				</tr>
 				<tr>
 					<td>存款金额</td>
-					<td><input class="form-control" sype="text" id="money" placeholder="请输入存款金额"></td>
+					<td><input onfocus="clearContent()" class="form-control" sype="text" id="money" placeholder="请输入存款金额"></td>
 				</tr>
 				<tr>
 					<td>存款的年限</td>
@@ -29,24 +69,25 @@
 						<select id="year" class="form-control">
 							<option>------请选择------</option>
 							<option value="0.0175">一年（%1.75）</option>
-							<option value="0.0225">二年（%2.25）</option>
-							<option value="0.0275">三年（%2.75）</option>
-							<option value="0.0275">五年（%2.75）</option>
+							<option value="0.045">二年（%2.25）</option>
+							<option value="0.0825">三年（%2.75）</option>
+							<option value="0.1375">五年（%2.75）</option>
 						</select>
 					</td>
 				</tr>
 				<tr>
 					<td>所得利息</td>
 					<!--readonly="readonly"表示只读-->
-					<td><input type="text" class="form-control" readonly="readonly"/></td>
+					<td><input id="lixi" type="text" class="form-control" readonly="readonly"/></td>
 				</tr>
 				<tr>
 					<td>本息合计</td>
-					<td><input type="text" class="form-control" readonly="readonly"></td>
+					<td><input id="total" type="text" class="form-control" readonly="readonly"></td>
 				</tr>
 				<tr>
 					<td colspan="2">
-						<button class="btn btn-primary btn-block">计算</button>
+						<!--onclick=""表示点击一下-->
+						<button onclick="calc()"100 class="btn btn-primary btn-block">计算</button>
 					</td>
 				</tr>
 			</table>
